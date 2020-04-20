@@ -7,6 +7,7 @@ import java.util.Scanner;
 import java.util.Set;
 
 import Items.*;
+
 public class Inventory {
 
 	private Map<String, Item> items = new HashMap<String, Item>();
@@ -33,14 +34,37 @@ public class Inventory {
 				items.put(item[1], new Weapon(item[1], Integer.parseInt(item[2]), Integer.parseInt(item[3])));
 			}
 		}
+		sc.close();
 	}
 
 	public void addItem(String name) {
-		inv.add(getItem(name));
+		Item item = getItem(name);
+		if (!this.hasItem(name)) {
+			inv.add(item);
+		}
+		item.addCount(1);
 	}
 
 	public Item getItem(String name) {
 		return items.get(name);
+	}
+
+	public void removeItem(String name) {
+		Item item = getItem(name);
+		if (this.hasItem(name)) {
+			if (item.getStack() <= 1) {
+				inv.remove(item);
+			} else {
+				item.subtractCount(1);
+			}
+		}
+	}
+
+	public boolean hasItem(String name) {
+		if (inv.contains(getItem(name))) {
+			return true;
+		}
+		return false;
 	}
 
 	public String toString() {

@@ -12,6 +12,14 @@ public abstract class Item {
 
 	abstract void use();
 
+	public void addCount(int num) {
+		this.stack += num;
+	}
+
+	public void subtractCount(int num) {
+		this.stack -= num;
+	}
+
 	public String getName() {
 		return name;
 	}
@@ -20,11 +28,11 @@ public abstract class Item {
 		this.name = name;
 	}
 
-	public int getNum() {
+	public int getStack() {
 		return stack;
 	}
 
-	public void setNum(int stack) {
+	public void setStack(int stack) {
 		this.stack = stack;
 	}
 
