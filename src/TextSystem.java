@@ -15,23 +15,24 @@ public class TextSystem {
 		String input = "";
 
 		if (!items.equals("")) {
-			String[] list = items.split(",");
+			String[] list = items.toLowerCase().split(",");
 
-			for (String s : list) {
-				itemList.add(s);
+			for (int i = 0; i < list.length; i++) {
+				list[i] = list[i].substring(0, 1).toUpperCase() + list[i].substring(1);
+				itemList.add(list[i]);
 			}
 		}
 
 		while (!input.equalsIgnoreCase("e")) {
 			printScroll(text);
-			input = sc.nextLine();
-			read(input.split(" "), itemList);
+			input = wordCasing(sc.nextLine());
+			read(input.trim().split(" "), itemList);
 		}
 	}
 
 	public void read(String[] response, ArrayList<String> itemList) {
 
-		if (response[0].equals("take")) {
+		if (response[0].equals("Take") || response[0].equals("T")) {
 			for (int i = 1; i < response.length; i++) {
 				if (!itemList.contains(response[i])) {
 					System.out.println("Unknown item: " + response[i]);
@@ -41,30 +42,33 @@ public class TextSystem {
 					itemList.remove(response[i]);
 				}
 			}
-		} else if (response[0].equals("talkto")) {
+		} else if (response[0].equals("Talkto")) {
 			System.out.println("TALKTO NOT FINISHED");
-		} else if (response[0].equals("search")) {
+		} else if (response[0].equals("Search") || response[0].equals("S")) {
 			if (itemList.isEmpty()) {
 				System.out.println("Nothing here");
 			} else {
 				for (String s : itemList) {
-					System.out.println(s);
+					System.out.print(s + " ");
 				}
+				System.out.println();
 			}
-		} else if (response[0].equals("fight") || response[0].equals("f")) {
+		} else if (response[0].equals("Fight") || response[0].equals("F")) {
 			System.out.println("FIGHT NOT FINISHED");
-		} else if (response[0].equals("use")) {
+		} else if (response[0].equals("Use")) {
 			System.out.println("USE NOT FINISHED");
-		} else if (response[0].equals("drop")) {
+		} else if (response[0].equals("Drop")) {
 			inv.removeItem(response[1]);
-		} else if (response[0].equals("help") || response[0].equals("h")) {
-			System.out.println("Possible commands:\n" + "take     talkto   use      f(ight)\n"
-					+ "search   d(rop)   m(enu)   i(nv)\n" + "e(xit)");
-		} else if (response[0].equals("menu") || response[0].equals("m")) {
+		} else if (response[0].equals("Help") || response[0].equals("H")) {
+			System.out.println("Possible commands:\n"
+					+ "take       talkto     use        f(ight)\n"
+					+ "search     d(rop)     m(enu)     i(nv)\n"
+					+ "c(ontinue)");
+		} else if (response[0].equals("Menu") || response[0].equals("M")) {
 			System.out.println("MENU NOT FINISHED"); // need to design menu
-		} else if (response[0].equals("inv") || response[0].equals("i")) {
+		} else if (response[0].equals("Inv") || response[0].equals("I")) {
 			System.out.println(inv.toString());
-		} else if (response[0].equals("e") || response[0].equals("exit")) {
+		} else if (response[0].equals("E") || response[0].equals("Exit")) {
 
 		} else {
 			System.out.println("Could you repeat that? Type help for commands.");
@@ -90,12 +94,14 @@ public class TextSystem {
 			System.out.println();
 		}
 	}
-
-	/*
-	 * System to allow for endless item/text interaction while looking for q to exit
-	 * ArrayList to always check if itemlist is empty Then have a message read if it
-	 * is empty and you try to pick something up
-	 * 
-	 */
-
+	
+	public String wordCasing(String input) {
+		String[] newInput = input.toLowerCase().split(" ");
+		String result = "";
+		for (int i = 0; i < newInput.length; i++) {
+			result += newInput[i].substring(0, 1).toUpperCase() + newInput[i].substring(1) + " ";
+		}
+		
+		return result;
+	}
 }
