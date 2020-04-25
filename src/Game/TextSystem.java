@@ -1,18 +1,24 @@
+package Game;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+import Character.Player;
 
 public class TextSystem {
 	
-	public Inventory inv = new Inventory();
+	private Player p = new Player("", 0, 0, 0);
 	private ArrayList<String> itemList = new ArrayList<String>();
+	private Map<Integer, String> choiceList = new HashMap<Integer, String>();
 	
 	public void Start() throws InterruptedException{
-		inv.readItems();
-		print("Welcome to my first decent Choose Your Own Adventure Game", "apple");
-		print("This is me testing that it will do one at a time", "carrot");
+		print("Welcome to my first decent Choose Your Own Adventure Game\n", "Go left,Go right", "apple,carrot");
+		
 	}
 	
-	public void print(String text, String items) {
+	public void print(String text, String choices, String items) throws InterruptedException {
 		itemList.clear();
+		choiceList.clear();
 		if (!items.equals("")) {
 			String[] list = items.toLowerCase().split(",");
 
@@ -21,11 +27,19 @@ public class TextSystem {
 				itemList.add(list[i]);
 			}
 		}
+		if (!choices.equals("")) {
+			String[] list = choices.trim().split(",");
+			
+			for (int i = 0; i < list.length; i++) {
+				choiceList.put(i+1, list[i]);
+				text += "[" + (i + 1) + "] " + list[i] + "\n";
+			}
+		}
 		
 		Main.println(text);
 	}
 	
-	public void read(String input) {
+	public int read(String input) {
 
 		String[] response;
 
@@ -38,12 +52,12 @@ public class TextSystem {
 						Main.println("Unknown item: " + response[i]);
 						break;
 					} else {
-						inv.addItem(response[i]);
+						p.takeItem(response[i]);
 						itemList.remove(response[i]);
 					}
 				}
 			} else if (response[0].equals("Talkto")) {
-				Main.println("TALKTO NOT FINISHED");
+				p.talkTo();
 			} else if (response[0].equals("Search") || response[0].equals("S")) {
 				if (itemList.isEmpty()) {
 					Main.println("Nothing here");
@@ -55,45 +69,35 @@ public class TextSystem {
 					Main.println(str);
 				}
 			} else if (response[0].equals("Fight") || response[0].equals("F")) {
-				Main.println("FIGHT NOT FINISHED");
+				p.fight();
 			} else if (response[0].equals("Use")) {
-				Main.println("USE NOT FINISHED");
+				p.use();
 			} else if (response[0].equals("Drop")) {
-				inv.removeItem(response[1]);
+				p.dropItem(response[1]);
 			} else if (response[0].equals("Help") || response[0].equals("H")) {
 				Main.println("Possible commands:\n" + "take       talkto     use        f(ight)\n"
 						+ "search     d(rop)     m(enu)     i(nv)\n" + "c(ontinue)");
 			} else if (response[0].equals("Menu") || response[0].equals("M")) {
-				Main.println("MENU NOT FINISHED"); // need to design menu
+				p.menu();
 			} else if (response[0].equals("Inv") || response[0].equals("I")) {
-				Main.println(inv.toString());
+				Main.println(p.printInv());
 			} else if (response[0].equals("Exit") || response[0].equals("E")) {
 
 			} else {
-				Main.println("Could you repeat that? Type help for commands.");
-			}
-		}
-
-	}
-
-	//Unused until it can be reimplemented
-	public void printScroll(String text) throws InterruptedException {
-		if (text.contains("\n")) {
-			String[] texts = text.split("\n");
-			for (int i = 0; i < texts.length; i++) {
-				for (int j = 0; j < texts[i].length(); j++) {
-					System.out.print(texts[i].charAt(j));
-					Thread.sleep(0);
+				try {
+					int choice = Integer.parseInt(input);
+					if (choiceList.containsKey(choice)) {
+						return choice;
+					} else {
+						Main.println("Sorry, [" + choice + "] isn't an option.");
+					}
+				} catch (Exception e) {
+					Main.println("Could you repeat that? Type help for commands.");
 				}
-				System.out.println();
 			}
-		} else {
-			for (int i = 0; i < text.length(); i++) {
-				System.out.print(text.charAt(i));
-				Thread.sleep(0);
-			}
-			System.out.println();
 		}
+		
+		return -1;
 	}
 
 	public String wordCasing(String input) {

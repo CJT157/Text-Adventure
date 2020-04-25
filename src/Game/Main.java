@@ -1,7 +1,5 @@
-import java.util.ArrayList;
-
+package Game;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -17,6 +15,7 @@ public class Main extends Application{
 	public static TextArea ta;
 	public TextField tf;
 	public Button btn;
+	public static int choice = 0;
 
 	public static void main(String[] args) throws InterruptedException {
 		launch(args);
@@ -26,7 +25,10 @@ public class Main extends Application{
 	public void start(Stage primaryStage) throws Exception {
 		primaryStage.setTitle("Text Adventure");
 		
-		primaryStage.setScene(new Scene(createContent()));
+		Scene scene = new Scene(createContent());
+		scene.getStylesheets().add("global_v1.css");
+		
+		primaryStage.setScene(scene);
 		primaryStage.show();
 		
 	}
@@ -39,8 +41,10 @@ public class Main extends Application{
 		grid.setVgap(10);
 		
 		ta = new TextArea();
+		ta.setMinSize(400, 300);
 		ta.setPrefRowCount(15);
 		ta.setEditable(false);
+		ta.setFocusTraversable(false);
 		grid.add(ta, 0, 0);
 		
 		tf = new TextField();
@@ -51,21 +55,17 @@ public class Main extends Application{
 			public void handle(KeyEvent keyEvent) {
 				handleEvent(keyEvent);
 			}
-		}); 
+		});
 		
 		ts.Start();
 		
 		return grid;
 	}
 	
-	public void initGame() {
-		
-	}
-	
 	public void handleEvent(KeyEvent e) {
 		
 		if (e.getEventType() == KeyEvent.KEY_PRESSED && e.getCode() == KeyCode.ENTER) {
-			ts.read(tf.getText());
+			choice = ts.read(tf.getText());
 			tf.clear();
 		}
 	}
