@@ -1,19 +1,18 @@
 import java.util.ArrayList;
-import java.util.Scanner;
 
 public class TextSystem {
-
-	private Scanner sc = new Scanner(System.in);
-	private Inventory inv = new Inventory();
-
-	public TextSystem(Inventory inv) {
-		this.inv = inv;
+	
+	public Inventory inv = new Inventory();
+	private ArrayList<String> itemList = new ArrayList<String>();
+	
+	public void Start() throws InterruptedException{
+		inv.readItems();
+		print("Welcome to my first decent Choose Your Own Adventure Game", "apple");
+		print("This is me testing that it will do one at a time", "carrot");
 	}
-
-	public void print(String text, String items) throws InterruptedException {
-		ArrayList<String> itemList = new ArrayList<String>();
-		String input = "";
-
+	
+	public void print(String text, String items) {
+		itemList.clear();
 		if (!items.equals("")) {
 			String[] list = items.toLowerCase().split(",");
 
@@ -22,60 +21,62 @@ public class TextSystem {
 				itemList.add(list[i]);
 			}
 		}
-
-		while (!input.equalsIgnoreCase("e")) {
-			printScroll(text);
-			input = wordCasing(sc.nextLine());
-			read(input.trim().split(" "), itemList);
-		}
+		
+		Main.println(text);
 	}
+	
+	public void read(String input) {
 
-	public void read(String[] response, ArrayList<String> itemList) {
+		String[] response;
 
-		if (response[0].equals("Take") || response[0].equals("T")) {
-			for (int i = 1; i < response.length; i++) {
-				if (!itemList.contains(response[i])) {
-					System.out.println("Unknown item: " + response[i]);
-					break;
+		if (!input.equals("")) {
+			response = wordCasing(input).split(" ");
+
+			if (response[0].equals("Take") || response[0].equals("T")) {
+				for (int i = 1; i < response.length; i++) {
+					if (!itemList.contains(response[i])) {
+						Main.println("Unknown item: " + response[i]);
+						break;
+					} else {
+						inv.addItem(response[i]);
+						itemList.remove(response[i]);
+					}
+				}
+			} else if (response[0].equals("Talkto")) {
+				Main.println("TALKTO NOT FINISHED");
+			} else if (response[0].equals("Search") || response[0].equals("S")) {
+				if (itemList.isEmpty()) {
+					Main.println("Nothing here");
 				} else {
-					inv.addItem(response[i]);
-					itemList.remove(response[i]);
+					String str = "";
+					for (String s : itemList) {
+						str += s + " ";
+					}
+					Main.println(str);
 				}
-			}
-		} else if (response[0].equals("Talkto")) {
-			System.out.println("TALKTO NOT FINISHED");
-		} else if (response[0].equals("Search") || response[0].equals("S")) {
-			if (itemList.isEmpty()) {
-				System.out.println("Nothing here");
-			} else {
-				for (String s : itemList) {
-					System.out.print(s + " ");
-				}
-				System.out.println();
-			}
-		} else if (response[0].equals("Fight") || response[0].equals("F")) {
-			System.out.println("FIGHT NOT FINISHED");
-		} else if (response[0].equals("Use")) {
-			System.out.println("USE NOT FINISHED");
-		} else if (response[0].equals("Drop")) {
-			inv.removeItem(response[1]);
-		} else if (response[0].equals("Help") || response[0].equals("H")) {
-			System.out.println("Possible commands:\n"
-					+ "take       talkto     use        f(ight)\n"
-					+ "search     d(rop)     m(enu)     i(nv)\n"
-					+ "c(ontinue)");
-		} else if (response[0].equals("Menu") || response[0].equals("M")) {
-			System.out.println("MENU NOT FINISHED"); // need to design menu
-		} else if (response[0].equals("Inv") || response[0].equals("I")) {
-			System.out.println(inv.toString());
-		} else if (response[0].equals("E") || response[0].equals("Exit")) {
+			} else if (response[0].equals("Fight") || response[0].equals("F")) {
+				Main.println("FIGHT NOT FINISHED");
+			} else if (response[0].equals("Use")) {
+				Main.println("USE NOT FINISHED");
+			} else if (response[0].equals("Drop")) {
+				inv.removeItem(response[1]);
+			} else if (response[0].equals("Help") || response[0].equals("H")) {
+				Main.println("Possible commands:\n" + "take       talkto     use        f(ight)\n"
+						+ "search     d(rop)     m(enu)     i(nv)\n" + "c(ontinue)");
+			} else if (response[0].equals("Menu") || response[0].equals("M")) {
+				Main.println("MENU NOT FINISHED"); // need to design menu
+			} else if (response[0].equals("Inv") || response[0].equals("I")) {
+				Main.println(inv.toString());
+			} else if (response[0].equals("Exit") || response[0].equals("E")) {
 
-		} else {
-			System.out.println("Could you repeat that? Type help for commands.");
+			} else {
+				Main.println("Could you repeat that? Type help for commands.");
+			}
 		}
 
 	}
 
+	//Unused until it can be reimplemented
 	public void printScroll(String text) throws InterruptedException {
 		if (text.contains("\n")) {
 			String[] texts = text.split("\n");
@@ -94,14 +95,17 @@ public class TextSystem {
 			System.out.println();
 		}
 	}
-	
+
 	public String wordCasing(String input) {
-		String[] newInput = input.toLowerCase().split(" ");
-		String result = "";
-		for (int i = 0; i < newInput.length; i++) {
-			result += newInput[i].substring(0, 1).toUpperCase() + newInput[i].substring(1) + " ";
+		if (!input.equals("")) {
+			String[] newInput = input.toLowerCase().split(" ");
+			String result = "";
+			for (int i = 0; i < newInput.length; i++) {
+				result += newInput[i].substring(0, 1).toUpperCase() + newInput[i].substring(1) + " ";
+			}
+
+			return result;
 		}
-		
-		return result;
+		return "";
 	}
 }

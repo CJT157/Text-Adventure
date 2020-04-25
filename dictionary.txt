@@ -1,8 +1,0 @@
-type,name,amount,extra
-thing,can,0
-thing,key,0
-vegetable,carrot,0,10
-fruit,apple,0,12
-weapon,stick,0,13
-weapon,bat,0,24
-weapon,sword,0,36

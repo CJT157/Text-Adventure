@@ -3,7 +3,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-
 public class Inventory {
 
 	private Map<String, Item> items = new HashMap<String, Item>();
@@ -47,10 +46,16 @@ public class Inventory {
 	}
 
 	public String toString() {
-		String inventory = "";
-		for (Item i : inv) {
-			inventory += i + "\n";
+		String inventory = "---Inventory---\n";
+		if (!inv.isEmpty()) {
+			for (Item i : inv) {
+				inventory += i + "\n";
+			}
+			
+		} else {
+			inventory += "Empty\n";
 		}
+		inventory += "---------------";
 		return inventory;
 	}
 
