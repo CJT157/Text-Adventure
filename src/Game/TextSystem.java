@@ -1,4 +1,5 @@
 package Game;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -6,40 +7,49 @@ import java.util.Map;
 import Character.Player;
 
 public class TextSystem {
-	
+
 	private Player p = new Player("", 0, 0, 0);
 	private ArrayList<String> itemList = new ArrayList<String>();
-	private Map<Integer, String> choiceList = new HashMap<Integer, String>();
-	
-	public void Start() throws InterruptedException{
-		print("Welcome to my first decent Choose Your Own Adventure Game\n", "Go left,Go right", "apple,carrot");
-		
-	}
-	
-	public void print(String text, String choices, String items) throws InterruptedException {
-		itemList.clear();
-		choiceList.clear();
-		if (!items.equals("")) {
-			String[] list = items.toLowerCase().split(",");
+	private Map<String, Choice> choiceList = new HashMap<String, Choice>();
+	private Choice currChoice;
+	private String choiceHist;
 
-			for (int i = 0; i < list.length; i++) {
-				list[i] = list[i].substring(0, 1).toUpperCase() + list[i].substring(1);
-				itemList.add(list[i]);
-			}
-		}
-		if (!choices.equals("")) {
-			String[] list = choices.trim().split(",");
-			
-			for (int i = 0; i < list.length; i++) {
-				choiceList.put(i+1, list[i]);
-				text += "[" + (i + 1) + "] " + list[i] + "\n";
-			}
-		}
-		
-		Main.println(text);
+	public TextSystem() {
+		this.choiceHist = "";
 	}
-	
-	public int read(String input) {
+
+	public void initChoices() throws InterruptedException {
+		choiceList.put("1", new Choice(
+				"Hello! Welcome!\n"
+				+ "This is some test dialogue, please choose which path you would like to go down.",
+				"The right path,The left path", "apple,carrot", 1));
+		
+		choiceList.put("11", new Choice("Ah, the right path, very good job!\n"
+				+ "What would you like to do now?",
+				"Continue walking,Stop and look around", "apple", 11));
+		
+		choiceList.put("111",
+				new Choice("Oooh alright you're in a hurry, let's see what the right path has to offer!", "This is the end of this branch", "apple", 111));
+		
+		choiceList.put("112", new Choice("Great! This gives me some time to tell you useful information.\n"
+				+ "Trying entering [s] to search for any items around here.\n"
+				+ "Enter your next choice after you've looked around",
+				"This is the end of this branch", "apple,carrot", 112));
+
+		choiceList.put("12", new Choice("Ah, the left path, my favorite!\n" + "What would you like to do now?",
+				"Continue walking,Stop and look around", "carrot", 12));
+		
+		choiceList.put("121",
+				new Choice("Oh somebody's excited! Let's keep moing and see what we can find.", "This is the end of this branch", "carrot", 121));
+		
+		choiceList.put("122",
+				new Choice("Great! This gives me some time to tell you useful information.\n"
+						+ "Trying entering [s] to search for any items around here.\n"
+						+ "Enter your next choice after you've looked around",
+						"This is the end of this branch", "apple,carrot", 112));
+	}
+
+	public void read(String input) {
 
 		String[] response;
 
@@ -47,6 +57,7 @@ public class TextSystem {
 			response = wordCasing(input).split(" ");
 
 			if (response[0].equals("Take") || response[0].equals("T")) {
+
 				for (int i = 1; i < response.length; i++) {
 					if (!itemList.contains(response[i])) {
 						Main.println("Unknown item: " + response[i]);
@@ -60,12 +71,13 @@ public class TextSystem {
 				p.talkTo();
 			} else if (response[0].equals("Search") || response[0].equals("S")) {
 				if (itemList.isEmpty()) {
-					Main.println("Nothing here");
+					Main.println("Nothing here\n");
 				} else {
 					String str = "";
 					for (String s : itemList) {
 						str += s + " ";
 					}
+					str += "\n";
 					Main.println(str);
 				}
 			} else if (response[0].equals("Fight") || response[0].equals("F")) {
@@ -76,7 +88,7 @@ public class TextSystem {
 				p.dropItem(response[1]);
 			} else if (response[0].equals("Help") || response[0].equals("H")) {
 				Main.println("Possible commands:\n" + "take       talkto     use        f(ight)\n"
-						+ "search     d(rop)     m(enu)     i(nv)\n" + "c(ontinue)");
+						+ "search     d(rop)     m(enu)     i(nv)\n" + "c(ontinue)\n");
 			} else if (response[0].equals("Menu") || response[0].equals("M")) {
 				p.menu();
 			} else if (response[0].equals("Inv") || response[0].equals("I")) {
@@ -85,21 +97,35 @@ public class TextSystem {
 
 			} else {
 				try {
-					int choice = Integer.parseInt(input);
-					if (choiceList.containsKey(choice)) {
-						return choice;
+					if (input.length() > 1) {
+						Main.println("Only type one number at a time please.\n");
 					} else {
-						Main.println("Sorry, [" + choice + "] isn't an option.");
+						this.choiceHist += Integer.parseInt(input);
+						if (choiceList.containsKey(this.choiceHist)) {
+							
+							this.currChoice = choiceList.get(choiceHist);
+							this.itemList = this.currChoice.getItems();
+							
+							Main.println(this.currChoice.toString());
+							
+						} else {
+							Main.println("Sorry, [" + this.choiceHist.charAt(this.choiceHist.length() - 1) + "] isn't an option.\n");
+							this.choiceHist = this.choiceHist.substring(0, (this.choiceHist.length() - 1));
+						}
 					}
 				} catch (Exception e) {
 					Main.println("Could you repeat that? Type help for commands.");
 				}
 			}
 		}
-		
-		return -1;
 	}
 
+	/**
+	 * Needed for allowing actions to be done in lower and upper case, defaults to upper case
+	 * 
+	 * @param input : user text input
+	 * @return string with all words capitalized
+	 */
 	public String wordCasing(String input) {
 		if (!input.equals("")) {
 			String[] newInput = input.toLowerCase().split(" ");

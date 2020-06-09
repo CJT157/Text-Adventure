@@ -8,11 +8,15 @@ import Game.Item;
 
 public class Inventory {
 
+	/*
+	 * TODO: Make it so it is possible to drop multiple items at a time
+	 */
+	
 	private Map<String, Item> items = new HashMap<String, Item>();
 	private Set<Item> inv = new HashSet<Item>();
 
 	public void readItems(){
-		for (int i = 1; i <= 7; i++) {
+		for (int i = 1; i <= 8; i++) {
 			Item item = new Item(i);
 			items.put(item.getName(), item);
 		}

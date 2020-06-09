@@ -24,7 +24,7 @@ public abstract class Character {
 	}
 	
 	public void invInit() {
-		inv.readItems();
+		this.inv.readItems();
 	}
 
 	public String getName() {

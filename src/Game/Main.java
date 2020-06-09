@@ -13,7 +13,7 @@ public class Main extends Application{
 
 	public TextSystem ts = new TextSystem();
 	public static TextArea ta;
-	public TextField tf;
+	public static TextField tf;
 	public Button btn;
 	public static int choice = 0;
 
@@ -31,6 +31,8 @@ public class Main extends Application{
 		primaryStage.setScene(scene);
 		primaryStage.show();
 		
+		println("Welcome to this little adventure\n"
+				+ "Press [1] and [enter] to begin\n");
 	}
 	
 	public GridPane createContent() throws InterruptedException {
@@ -57,7 +59,7 @@ public class Main extends Application{
 			}
 		});
 		
-		ts.Start();
+		ts.initChoices();
 		
 		return grid;
 	}
@@ -65,7 +67,7 @@ public class Main extends Application{
 	public void handleEvent(KeyEvent e) {
 		
 		if (e.getEventType() == KeyEvent.KEY_PRESSED && e.getCode() == KeyCode.ENTER) {
-			choice = ts.read(tf.getText());
+			ts.read(tf.getText());
 			tf.clear();
 		}
 	}

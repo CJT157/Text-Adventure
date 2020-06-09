@@ -46,6 +46,10 @@ public class Item {
 		} else if (id == 7) {
 			this.name = "Key";
 			this.maxStack = 100;
+		} else if (id == 8) {
+			this.name = "Peach";
+			this.hp = 6;
+			this.maxStack = 100;
 		}
 	}
 	

@@ -11,6 +11,7 @@ public class Goblin extends Enemy {
 	
 	public Goblin(String name, int health, int damage, int defense, String table) {
 		super(name, health, damage, defense);
+		invInit();
 		generateLootTable(table);
 	}
 	
