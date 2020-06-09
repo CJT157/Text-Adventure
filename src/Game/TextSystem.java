@@ -1,15 +1,15 @@
 package Game;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import Character.Player;
 
 public class TextSystem {
+	
 
 	private Player p = new Player("", 0, 0, 0);
-	private ArrayList<String> itemList = new ArrayList<String>();
+	private HashMap<String, Integer> itemList = new HashMap<String, Integer>();
 	private Map<String, Choice> choiceList = new HashMap<String, Choice>();
 	private Choice currChoice;
 	private String choiceHist;
@@ -19,34 +19,37 @@ public class TextSystem {
 	}
 
 	public void initChoices() throws InterruptedException {
-		choiceList.put("1", new Choice(
-				"Hello! Welcome!\n"
-				+ "This is some test dialogue, please choose which path you would like to go down.",
-				"The right path,The left path", "apple,carrot", 1));
-		
-		choiceList.put("11", new Choice("Ah, the right path, very good job!\n"
-				+ "What would you like to do now?",
-				"Continue walking,Stop and look around", "apple", 11));
-		
-		choiceList.put("111",
-				new Choice("Oooh alright you're in a hurry, let's see what the right path has to offer!", "This is the end of this branch", "apple", 111));
-		
-		choiceList.put("112", new Choice("Great! This gives me some time to tell you useful information.\n"
-				+ "Trying entering [s] to search for any items around here.\n"
-				+ "Enter your next choice after you've looked around",
-				"This is the end of this branch", "apple,carrot", 112));
+		choiceList.put("1",
+				new Choice(
+						"Hello! Welcome!\n"
+								+ "This is some test dialogue, please choose which path you would like to go down.",
+						"The right path,The left path", "apple3,carrot1,stick1", 1));
+
+		choiceList.put("11", new Choice("Ah, the right path, very good job!\n" + "What would you like to do now?",
+				"Continue walking,Stop and look around", "apple1,carrot1", 11));
+
+		choiceList.put("111", new Choice("Oooh alright you're in a hurry, let's see what the right path has to offer!",
+				"This is the end of this branch", "apple1", 111));
+
+		choiceList.put("112",
+				new Choice(
+						"Great! This gives me some time to tell you useful information.\n"
+								+ "Trying entering [s] to search for any items around here.\n"
+								+ "Enter your next choice after you've looked around",
+						"This is the end of this branch", "apple1,carrot1", 112));
 
 		choiceList.put("12", new Choice("Ah, the left path, my favorite!\n" + "What would you like to do now?",
-				"Continue walking,Stop and look around", "carrot", 12));
-		
-		choiceList.put("121",
-				new Choice("Oh somebody's excited! Let's keep moing and see what we can find.", "This is the end of this branch", "carrot", 121));
-		
+				"Continue walking,Stop and look around", "carrot1", 12));
+
+		choiceList.put("121", new Choice("Oh somebody's excited! Let's keep moing and see what we can find.",
+				"This is the end of this branch", "carrot1", 121));
+
 		choiceList.put("122",
-				new Choice("Great! This gives me some time to tell you useful information.\n"
-						+ "Trying entering [s] to search for any items around here.\n"
-						+ "Enter your next choice after you've looked around",
-						"This is the end of this branch", "apple,carrot", 112));
+				new Choice(
+						"Great! This gives me some time to tell you useful information.\n"
+								+ "Trying entering [s] to search for any items around here.\n"
+								+ "Enter your next choice after you've looked around",
+						"This is the end of this branch", "apple1,carrot1", 112));
 	}
 
 	public void read(String input) {
@@ -59,12 +62,20 @@ public class TextSystem {
 			if (response[0].equals("Take") || response[0].equals("T")) {
 
 				for (int i = 1; i < response.length; i++) {
-					if (!itemList.contains(response[i])) {
+					if (!itemList.containsKey(response[i])) {
 						Main.println("Unknown item: " + response[i]);
 						break;
 					} else {
-						p.takeItem(response[i]);
-						itemList.remove(response[i]);
+						try {
+							int numItems = Integer.parseInt(response[i + 1]);
+							p.takeItem(response[i], numItems);
+							addToInventory(response[i], numItems);
+							i++;
+						}
+						catch (Exception e) {
+							p.takeItem(response[i], 1);
+							addToInventory(response[i], 1);
+						}
 					}
 				}
 			} else if (response[0].equals("Talkto")) {
@@ -73,11 +84,11 @@ public class TextSystem {
 				if (itemList.isEmpty()) {
 					Main.println("Nothing here\n");
 				} else {
-					String str = "";
-					for (String s : itemList) {
-						str += s + " ";
+					String str = "----------------\n";
+					for (Map.Entry<String, Integer> entry : itemList.entrySet()) {
+						str += entry.getValue() + ": " + entry.getKey() + "\n";
 					}
-					str += "\n";
+					str += "----------------\n";
 					Main.println(str);
 				}
 			} else if (response[0].equals("Fight") || response[0].equals("F")) {
@@ -88,11 +99,9 @@ public class TextSystem {
 				p.dropItem(response[1]);
 			} else if (response[0].equals("Help") || response[0].equals("H")) {
 				Main.println("Possible commands:\n" + "take       talkto     use        f(ight)\n"
-						+ "search     d(rop)     m(enu)     i(nv)\n" + "c(ontinue)\n");
+						+ "search     d(rop)     m(enu)     c(ontinue)\n");
 			} else if (response[0].equals("Menu") || response[0].equals("M")) {
 				p.menu();
-			} else if (response[0].equals("Inv") || response[0].equals("I")) {
-				Main.println(p.printInv());
 			} else if (response[0].equals("Exit") || response[0].equals("E")) {
 
 			} else {
@@ -102,14 +111,15 @@ public class TextSystem {
 					} else {
 						this.choiceHist += Integer.parseInt(input);
 						if (choiceList.containsKey(this.choiceHist)) {
-							
+
 							this.currChoice = choiceList.get(choiceHist);
 							this.itemList = this.currChoice.getItems();
-							
+
 							Main.println(this.currChoice.toString());
-							
+
 						} else {
-							Main.println("Sorry, [" + this.choiceHist.charAt(this.choiceHist.length() - 1) + "] isn't an option.\n");
+							Main.println("Sorry, [" + this.choiceHist.charAt(this.choiceHist.length() - 1)
+									+ "] isn't an option.\n");
 							this.choiceHist = this.choiceHist.substring(0, (this.choiceHist.length() - 1));
 						}
 					}
@@ -120,8 +130,21 @@ public class TextSystem {
 		}
 	}
 
+	public String getInventory() {
+		return p.printInv();
+	}
+	
+	public void addToInventory(String input, int numItems) {
+		if (itemList.get(input) > numItems) {
+			itemList.put(input, itemList.get(input) - numItems);
+		} else {
+			itemList.remove(input);
+		}
+	}
+
 	/**
-	 * Needed for allowing actions to be done in lower and upper case, defaults to upper case
+	 * Needed for allowing actions to be done in lower and upper case, defaults to
+	 * upper case
 	 * 
 	 * @param input : user text input
 	 * @return string with all words capitalized

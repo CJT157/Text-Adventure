@@ -3,17 +3,22 @@ package Game;
 public class Item {
 
 	private String name;
-	private int hp;
+	private int heal;
 	private int damage;
-	private String material;
 	private int stack;
 	private int maxStack;
+	private Material material;
+	
+	enum Material {
+		//If I ever get to setting up a crafting system
+		None, Wood, Stone, Metal;
+	}
 	
 	public Item(int id) {
 		this.name = "";
 		this.damage = 0;
-		this.hp = 0;
-		this.material = "";
+		this.heal = 0;
+		this.material = Material.None;
 		this.stack = 0;
 		this.maxStack = 0;
 		setDefaults(id);
@@ -22,11 +27,11 @@ public class Item {
 	public void setDefaults(int id) {
 		if (id == 1) {
 			this.name = "Apple";
-			this.hp = 5;
+			this.heal = 5;
 			this.maxStack = 100;
 		} else if (id == 2) {
 			this.name = "Carrot";
-			this.hp = 4;
+			this.heal = 4;
 			this.maxStack = 100;
 		} else if (id == 3) {
 			this.name = "Stick";
@@ -41,14 +46,14 @@ public class Item {
 			this.maxStack = 1;
 		} else if (id == 6) {
 			this.name = "Can";
-			this.material = "metal";
+			this.material = Material.Metal;
 			this.maxStack = 100;
 		} else if (id == 7) {
 			this.name = "Key";
 			this.maxStack = 100;
 		} else if (id == 8) {
 			this.name = "Peach";
-			this.hp = 6;
+			this.heal = 6;
 			this.maxStack = 100;
 		}
 	}
@@ -69,12 +74,12 @@ public class Item {
 		this.name = name;
 	}
 
-	public int getHp() {
-		return hp;
+	public int getHeal() {
+		return heal;
 	}
 
-	public void setHp(int hp) {
-		this.hp = hp;
+	public void setHeal(int heal) {
+		this.heal = heal;
 	}
 
 	public int getDamage() {
@@ -85,11 +90,11 @@ public class Item {
 		this.damage = damage;
 	}
 
-	public String getMaterial() {
-		return material;
+	public Material getMaterial() {
+		return this.material;
 	}
 
-	public void setMaterial(String material) {
+	public void setMaterial(Material material) {
 		this.material = material;
 	}
 

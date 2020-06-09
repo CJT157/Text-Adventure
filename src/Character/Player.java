@@ -8,8 +8,8 @@ public class Player extends Character {
 		super(name, health, damage, defense);
 	}
 	
-	public void takeItem(String item) {
-		inv.addItem(item);
+	public void takeItem(String item, int numItems) {
+		inv.addItem(item, numItems);
 	}
 	
 	public void dropItem(String item) {

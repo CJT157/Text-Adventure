@@ -13,6 +13,7 @@ public class Main extends Application{
 
 	public TextSystem ts = new TextSystem();
 	public static TextArea ta;
+	public static TextArea inventory;
 	public static TextField tf;
 	public Button btn;
 	public static int choice = 0;
@@ -31,6 +32,9 @@ public class Main extends Application{
 		primaryStage.setScene(scene);
 		primaryStage.show();
 		
+		primaryStage.setMaximized(true);
+		
+		updateInventory();
 		println("Welcome to this little adventure\n"
 				+ "Press [1] and [enter] to begin\n");
 	}
@@ -42,20 +46,34 @@ public class Main extends Application{
 		grid.setHgap(10);
 		grid.setVgap(10);
 		
+		Label gameLabel = new Label("Text Adventure");
+		grid.add(gameLabel, 0, 0);
+		
+		Label invLabel = new Label("Inventory");
+		grid.add(invLabel, 1, 0);
+		
 		ta = new TextArea();
 		ta.setMinSize(400, 300);
 		ta.setPrefRowCount(15);
 		ta.setEditable(false);
 		ta.setFocusTraversable(false);
-		grid.add(ta, 0, 0);
+		grid.add(ta, 0, 1);
+		
+		inventory = new TextArea();
+		inventory.setMaxSize(200, 300);
+		inventory.setPrefRowCount(15);
+		inventory.setEditable(false);
+		inventory.setFocusTraversable(false);
+		grid.add(inventory, 1, 1);
 		
 		tf = new TextField();
 		tf.setPromptText("type command here");
-		grid.add(tf, 0, 1);
+		grid.add(tf, 0, 2);
 		tf.setOnKeyPressed(new EventHandler<KeyEvent>(){
 			@Override
 			public void handle(KeyEvent keyEvent) {
-				handleEvent(keyEvent);
+				textInput(keyEvent);
+				updateInventory();
 			}
 		});
 		
@@ -64,12 +82,16 @@ public class Main extends Application{
 		return grid;
 	}
 	
-	public void handleEvent(KeyEvent e) {
+	public void textInput(KeyEvent e) {
 		
 		if (e.getEventType() == KeyEvent.KEY_PRESSED && e.getCode() == KeyCode.ENTER) {
 			ts.read(tf.getText());
 			tf.clear();
 		}
+	}
+	
+	public void updateInventory() {
+		inventory.setText(ts.getInventory());
 	}
 	
 	public static void println(String line) {

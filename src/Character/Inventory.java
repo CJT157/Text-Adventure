@@ -9,7 +9,7 @@ import Game.Item;
 public class Inventory {
 
 	/*
-	 * TODO: Make it so it is possible to drop multiple items at a time
+	 * TODO: Make it so it is possible to drop/add multiple items at a time
 	 */
 	
 	private Map<String, Item> items = new HashMap<String, Item>();
@@ -22,12 +22,12 @@ public class Inventory {
 		}
 	}
 
-	public void addItem(String name) {
+	public void addItem(String name, int numItems) {
 		Item item = getItem(name);
 		if (!this.hasItem(name)) {
 			inv.add(item);
 		}
-		item.addCount(1);
+		item.addCount(numItems);
 	}
 
 	public Item getItem(String name) {
@@ -53,7 +53,7 @@ public class Inventory {
 	}
 
 	public String toString() {
-		String inventory = "---Inventory---\n";
+		String inventory = "";
 		if (!inv.isEmpty()) {
 			for (Item i : inv) {
 				inventory += i + "\n";
@@ -62,7 +62,6 @@ public class Inventory {
 		} else {
 			inventory += "Empty\n";
 		}
-		inventory += "---------------";
 		return inventory;
 	}
 
