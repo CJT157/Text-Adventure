@@ -22,7 +22,9 @@ public class Choice {
 
 		for (int i = 0; i < list.length; i++) {
 			list[i] = list[i].substring(0, 1).toUpperCase() + list[i].substring(1);
+			
 			int numItems = Integer.parseInt(list[i].substring(list[i].length() - 1));
+			
 			itemList.put(list[i].substring(0, list[i].length() - 1), numItems);
 		}
 		

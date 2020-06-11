@@ -8,38 +8,67 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
+import java.util.Stack;
 
 public class Main extends Application{
 
+	public Scene mainScene;
 	public TextSystem ts = new TextSystem();
 	public static TextArea ta;
 	public static TextArea inventory;
 	public static TextField tf;
 	public Button btn;
 	public static int choice = 0;
+	public Stack<String> pastInput = new Stack<String>();
 
 	public static void main(String[] args) throws InterruptedException {
 		launch(args);
 	}
+	
+	/*
+	 * TODO: Spice up visuals a bit, I hate looking at everything
+	 * 
+	 * TODO: Change entire screen to fxml so styling and control is much easier
+	 * 			because html like script is so much easier
+	 * 
+	 * TODO: Upgrade Allow for player to press up to have up to 10 past inputs reappear
+	 */
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		primaryStage.setTitle("Text Adventure");
 		
-		Scene scene = new Scene(createContent());
-		scene.getStylesheets().add("global_v1.css");
+		Scene mainScene = new Scene(textSystem());
+		mainScene.getStylesheets().add("global_v1.css");
 		
-		primaryStage.setScene(scene);
+		//This is a mess
+		
+		GridPane grid = new GridPane();
+		grid.setPrefSize(800, 600);
+		grid.setAlignment(Pos.CENTER);
+		grid.setHgap(10);
+		grid.setVgap(10);
+		
+		Label title = new Label("Text Adventure");
+		grid.add(title, 0, 0);
+		
+		Button button = new Button("Start Game");
+		button.setOnAction(e -> primaryStage.setScene(mainScene));
+		grid.add(button, 0, 1);
+		
+		Scene titleScene = new Scene(grid);
+		
+		
+		primaryStage.setScene(titleScene);
 		primaryStage.show();
 		
-		primaryStage.setMaximized(true);
 		
 		updateInventory();
 		println("Welcome to this little adventure\n"
 				+ "Press [1] and [enter] to begin\n");
 	}
 	
-	public GridPane createContent() throws InterruptedException {
+	public GridPane textSystem() throws InterruptedException {
 		GridPane grid = new GridPane();
 		grid.setPrefSize(800, 600);
 		grid.setAlignment(Pos.CENTER);
@@ -86,7 +115,10 @@ public class Main extends Application{
 		
 		if (e.getEventType() == KeyEvent.KEY_PRESSED && e.getCode() == KeyCode.ENTER) {
 			ts.read(tf.getText());
+			pastInput.push(tf.getText());
 			tf.clear();
+		} else if (e.getEventType() == KeyEvent.KEY_PRESSED && e.getCode() == KeyCode.UP) {
+			tf.setText(pastInput.peek());
 		}
 	}
 	

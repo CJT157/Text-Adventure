@@ -3,6 +3,10 @@ package Character;
 import Game.Main;
 
 public class Player extends Character {
+	
+	/*
+	 * TODO: Pretty much everything this is so under developed
+	 */
 
 	public Player(String name, int health, int damage, int defense) {
 		super(name, health, damage, defense);
@@ -12,8 +16,8 @@ public class Player extends Character {
 		inv.addItem(item, numItems);
 	}
 	
-	public void dropItem(String item) {
-		inv.removeItem(item);
+	public void dropItem(String item, int numItems) {
+		inv.removeItem(item, numItems);
 	}
 	
 	public void talkTo() {

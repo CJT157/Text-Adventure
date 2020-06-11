@@ -1,7 +1,12 @@
+.root {
+	-fx-alignment: center;
+}
+
 .text-field {
 	-fx-border-color: #000000;
 }
 
 .text-area {
 	-fx-border-color: #000000;
+	-fx-border-radius: 5px;
 }
