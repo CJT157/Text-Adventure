@@ -32,10 +32,6 @@ public class Player extends Character {
 		Main.println("USE NOT FINISHED");
 	}
 	
-	public void menu() {
-		Main.println("MENU NOT FINISHED");
-	}
-	
 	public String printInv() {
 		return inv.toString();
 	}

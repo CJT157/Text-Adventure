@@ -8,12 +8,18 @@ public class Choice {
 	private String[] choices;
 	private HashMap<String, Integer> items = new HashMap<String, Integer>();
 	private int choiceKey;
+	private TextType textType;
 	
-	public Choice(String text, String choices, String items, int choiceKey) {
+	enum TextType {
+		Choice, Battle, Input;
+	}
+	
+	public Choice(String text, String choices, String items, int choiceKey, TextType textType) {
 		this.text = text;
 		this.choices = choices.split(",");
 		this.items = addItems(items);
 		this.choiceKey = choiceKey;
+		this.textType = textType;
 	}
 	
 	public HashMap<String, Integer> addItems(String items) {
@@ -32,7 +38,7 @@ public class Choice {
 	}
 
 	public String getText() {
-		return text;
+		return this.text;
 	}
 
 	public void setText(String text) {
@@ -40,7 +46,7 @@ public class Choice {
 	}
 
 	public String[] getChoices() {
-		return choices;
+		return this.choices;
 	}
 
 	public void setChoices(String[] choices) {
@@ -48,7 +54,7 @@ public class Choice {
 	}
 	
 	public HashMap<String, Integer> getItems() {
-		return items;
+		return this.items;
 	}
 	
 	public void setItems(HashMap<String, Integer> items) {
@@ -56,12 +62,21 @@ public class Choice {
 	}
 
 	public int getChoiceKey() {
-		return choiceKey;
+		return this.choiceKey;
 	}
 
 	public void setChoiceKey(int choiceKey) {
 		this.choiceKey = choiceKey;
 	}
+	
+	public TextType getTextType() {
+		return this.textType;
+	}
+
+	public void setTextType(TextType textType) {
+		this.textType = textType;
+	}
+	
 	
 	public String toString() {
 		String options = "";

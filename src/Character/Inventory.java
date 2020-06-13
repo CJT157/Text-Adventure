@@ -1,15 +1,14 @@
 package Character;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 import Game.Item;
 
 public class Inventory {
 	
 	private Map<String, Item> items = new HashMap<String, Item>();
-	private Set<Item> inv = new HashSet<Item>();
+	private ArrayList<Item> inv = new ArrayList<Item>();
 
 	/*
 	 * TODO: This is bad and needs to be redone
@@ -19,7 +18,6 @@ public class Inventory {
 	 * 			I really don't know how that would work but I think the workflow makes sense
 	 * 			anything to get rid of what's below this
 	 */
-	
 	public void readItems(){
 		for (int i = 1; i <= 16; i++) {
 			Item item = new Item(i);

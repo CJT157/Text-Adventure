@@ -12,8 +12,10 @@ import java.util.Stack;
 
 public class Main extends Application{
 
-	public Scene mainScene;
-	public TextSystem ts = new TextSystem();
+	public static Stage primaryStage;
+	public static Scene titleScene;
+	public static Scene mainScene;
+	public static TextSystem ts = new TextSystem();
 	public static TextArea ta;
 	public static TextArea inventory;
 	public static TextField tf;
@@ -36,13 +38,20 @@ public class Main extends Application{
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		primaryStage.setTitle("Text Adventure");
+		Main.primaryStage = primaryStage;
 		
-		Scene mainScene = new Scene(textSystem());
+		Main.primaryStage.setTitle("Text Adventure");
+		
+		titleScene = new Scene(titleScene());
+		
+		mainScene = new Scene(textSystem());
 		mainScene.getStylesheets().add("global_v1.css");
 		
-		//This is a mess
-		
+		Main.primaryStage.setScene(titleScene);
+		Main.primaryStage.show();
+	}
+	
+	public GridPane titleScene() {
 		GridPane grid = new GridPane();
 		grid.setPrefSize(800, 600);
 		grid.setAlignment(Pos.CENTER);
@@ -53,19 +62,10 @@ public class Main extends Application{
 		grid.add(title, 0, 0);
 		
 		Button button = new Button("Start Game");
-		button.setOnAction(e -> primaryStage.setScene(mainScene));
+		button.setOnAction(e -> Main.primaryStage.setScene(mainScene));
 		grid.add(button, 0, 1);
 		
-		Scene titleScene = new Scene(grid);
-		
-		
-		primaryStage.setScene(titleScene);
-		primaryStage.show();
-		
-		
-		updateInventory();
-		println("Welcome to this little adventure\n"
-				+ "Press [1] and [enter] to begin\n");
+		return grid;
 	}
 	
 	public GridPane textSystem() throws InterruptedException {
@@ -101,20 +101,31 @@ public class Main extends Application{
 		tf.setOnKeyPressed(new EventHandler<KeyEvent>(){
 			@Override
 			public void handle(KeyEvent keyEvent) {
-				textInput(keyEvent);
+				try {
+					textInput(keyEvent);
+				} catch (InterruptedException e) {
+					
+				}
 				updateInventory();
 			}
 		});
 		
-		ts.initChoices();
+		initMain();
 		
 		return grid;
 	}
 	
-	public void textInput(KeyEvent e) {
+	public static void initMain() throws InterruptedException {
+		ts.initChoices();
+		updateInventory();
+		println("Welcome to this little adventure\n"
+				+ "Press [1] and [enter] to begin\n");
+	}
+	
+	public void textInput(KeyEvent e) throws InterruptedException {
 		
 		if (e.getEventType() == KeyEvent.KEY_PRESSED && e.getCode() == KeyCode.ENTER) {
-			ts.read(tf.getText());
+			ts.read(tf.getText().trim());
 			pastInput.push(tf.getText());
 			tf.clear();
 		} else if (e.getEventType() == KeyEvent.KEY_PRESSED && e.getCode() == KeyCode.UP) {
@@ -122,7 +133,7 @@ public class Main extends Application{
 		}
 	}
 	
-	public void updateInventory() {
+	public static void updateInventory() {
 		inventory.setText(ts.getInventory());
 	}
 	
