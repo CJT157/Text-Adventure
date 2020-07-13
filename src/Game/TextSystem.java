@@ -4,36 +4,22 @@ import java.util.HashMap;
 import java.util.Map;
 
 import Character.Player;
-import Game.Choice.TextType;
 
 public class TextSystem {
-
+	
 	private Player player = new Player("", 0, 0, 0);
 	private HashMap<String, Integer> itemList = new HashMap<String, Integer>();
-	private Map<String, Choice> choiceList = new HashMap<String, Choice>();
-	private Choice currChoice;
+	private Map<String, Input> choiceList = new HashMap<String, Input>();
+	private Input currChoice;
 	private String choiceHist;
 	private int helpHelpCounter;
 
 	public TextSystem() {
-		this.currChoice = new Choice("blank",
-		"The right path,The left path", "apple3,carrot1,stick1", 1, TextType.Choice);
+		// To change the first option, edit this
+		this.currChoice = new Input("blank",
+		"The right path,The left path", "apple3,carrot1,stick1", 1);
 		this.choiceHist = "";
 	}
-	
-	/*
-	 * TODO: So this stuff right here really shouldn't be on the same page as the important system stuff
-	 * 		 	I think it should just be outsourced to another doc to free up space here
-	 * 
-	 * TODO: Text system needs to be more dynamic (I know) to allow for specific sections such as, setting player 
-	 * 			info, character dialogue, special occurences I want to spice up gameplay, etc.
-	 * 
-	 * TODO: Room system (check your notes for full details)
-	 * 
-	 * TODO: Battle system (plan out mostly before starting that)
-	 * 
-	 * TODO: 
-	 */
 
 	public void initChoices() throws InterruptedException {
 		this.choiceList.putAll(ChoiceCompiler.getChoices(choiceHist));
@@ -46,8 +32,6 @@ public class TextSystem {
 		if (!input.equals("")) {
 			response = wordCasing(input).split(" ");
 
-			switch (currChoice.getTextType()) {
-			case Choice:
 				switch (response[0]) {
 				case "Take":
 				case "T":
@@ -137,7 +121,7 @@ public class TextSystem {
 					Main.ta.clear();
 					this.itemList.clear();
 					this.choiceList.clear();
-					this.currChoice = new Choice("blank","blank", "blank2", 1, TextType.Choice);
+					this.currChoice = new Input("blank","blank", "blank2", 1);
 					this.choiceHist = "";
 					Main.primaryStage.setScene(Main.titleScene);
 					Main.initMain();
@@ -177,16 +161,15 @@ public class TextSystem {
 						Main.println("Could you repeat that? Type help for commands.");
 					} 
 				}
-				break;
-			case Battle:
-				Main.println("Hey battle worked");
-				break;
-			case Input:
-				Main.println("Hey input worked");
-				break;
-			default:
-				break;
-			}
+			/*
+			 * This definitely could work with the current system, I just need to initialize it with a fight choice
+			 * (just create a fight in the fight )
+			 * Hmm maybe leave on hold till room/dungeon system is done.
+			 */
+			/*
+			 * This is definitely not going to work with my current choice system
+			 */
+			
 		}
 	}
 
@@ -210,7 +193,7 @@ public class TextSystem {
 		}
 	}
 	
-	public void helpInfo(String command) {
+	public void helpInfo(String command) throws InterruptedException {
 		switch (command) {
 		case "Drop":
 		case "D":

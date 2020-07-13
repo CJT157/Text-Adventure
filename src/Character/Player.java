@@ -3,10 +3,6 @@ package Character;
 import Game.Main;
 
 public class Player extends Character {
-	
-	/*
-	 * TODO: Pretty much everything this is so under developed
-	 */
 
 	public Player(String name, int health, int damage, int defense) {
 		super(name, health, damage, defense);
@@ -20,15 +16,15 @@ public class Player extends Character {
 		inv.removeItem(item, numItems);
 	}
 	
-	public void talkTo() {
+	public void talkTo() throws InterruptedException {
 		Main.println("TALKTO NOT FINISHED");
 	}
 	
-	public void fight() {
+	public void fight() throws InterruptedException {
 		Main.println("FIGHT NOT FINISHED");
 	}
 	
-	public void use() {
+	public void use() throws InterruptedException {
 		Main.println("USE NOT FINISHED");
 	}
 	

@@ -8,7 +8,14 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
+
+import java.util.Random;
 import java.util.Stack;
+
+/*
+ * This text adventure engine is a side project of mine meant to help myself learn to use JavaFX
+ * Use this in any way you would like, but please credit me if used to build upon.
+ */
 
 public class Main extends Application{
 
@@ -22,27 +29,25 @@ public class Main extends Application{
 	public Button btn;
 	public static int choice = 0;
 	public Stack<String> pastInput = new Stack<String>();
+	public static String splashText;
 
 	public static void main(String[] args) throws InterruptedException {
 		launch(args);
 	}
-	
-	/*
-	 * TODO: Spice up visuals a bit, I hate looking at everything
-	 * 
-	 * TODO: Change entire screen to fxml so styling and control is much easier
-	 * 			because html like script is so much easier
-	 * 
-	 * TODO: Upgrade Allow for player to press up to have up to 10 past inputs reappear
-	 */
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		Main.primaryStage = primaryStage;
 		
-		Main.primaryStage.setTitle("Text Adventure");
+		Random r = new Random();
+		// To add new splash texts, add a comma at the end and then put the sentence you want surrounded by ""
+		String[] splashTexts = {"Hello World", "Remember to do something cool with these", "Don't read this"};
+		Main.splashText = splashTexts[r.nextInt(splashTexts.length + 1)];
+		
+		Main.primaryStage.setTitle("Text Adventure: " + Main.splashText);
 		
 		titleScene = new Scene(titleScene());
+		titleScene.getStylesheets().add("global_v1.css");
 		
 		mainScene = new Scene(textSystem());
 		mainScene.getStylesheets().add("global_v1.css");
@@ -129,7 +134,11 @@ public class Main extends Application{
 			pastInput.push(tf.getText());
 			tf.clear();
 		} else if (e.getEventType() == KeyEvent.KEY_PRESSED && e.getCode() == KeyCode.UP) {
-			tf.setText(pastInput.peek());
+			try {
+				tf.setText(pastInput.peek());
+			} catch (Exception error) {
+				
+			}
 		}
 	}
 	
@@ -137,7 +146,7 @@ public class Main extends Application{
 		inventory.setText(ts.getInventory());
 	}
 	
-	public static void println(String line) {
+	public static void println(String line) throws InterruptedException {
 		ta.appendText(line + "\n");
 	}
 

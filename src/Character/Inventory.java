@@ -10,14 +10,6 @@ public class Inventory {
 	private Map<String, Item> items = new HashMap<String, Item>();
 	private ArrayList<Item> inv = new ArrayList<Item>();
 
-	/*
-	 * TODO: This is bad and needs to be redone
-	 * 			All character inventories need to be redone to not require all items to be added to this hashmap.
-	 * 			12 am idea, create item objects but have the main one keep a dict of all item id's and searches it to match the name
-	 * 			Then get the item from that(somehow) and add it to the inventory
-	 * 			I really don't know how that would work but I think the workflow makes sense
-	 * 			anything to get rid of what's below this
-	 */
 	public void readItems(){
 		for (int i = 1; i <= 16; i++) {
 			Item item = new Item(i);

@@ -2,24 +2,18 @@ package Game;
 
 import java.util.HashMap;
 
-public class Choice {
+public class Input {
 
 	private String text;
 	private String[] choices;
 	private HashMap<String, Integer> items = new HashMap<String, Integer>();
 	private int choiceKey;
-	private TextType textType;
 	
-	enum TextType {
-		Choice, Battle, Input;
-	}
-	
-	public Choice(String text, String choices, String items, int choiceKey, TextType textType) {
+	public Input(String text, String choices, String items, int choiceKey) {
 		this.text = text;
 		this.choices = choices.split(",");
 		this.items = addItems(items);
 		this.choiceKey = choiceKey;
-		this.textType = textType;
 	}
 	
 	public HashMap<String, Integer> addItems(String items) {
@@ -67,14 +61,6 @@ public class Choice {
 
 	public void setChoiceKey(int choiceKey) {
 		this.choiceKey = choiceKey;
-	}
-	
-	public TextType getTextType() {
-		return this.textType;
-	}
-
-	public void setTextType(TextType textType) {
-		this.textType = textType;
 	}
 	
 	

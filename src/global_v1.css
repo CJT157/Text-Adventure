@@ -1,12 +1,27 @@
 .root {
 	-fx-alignment: center;
+	-fx-base: #000000; 
+}
+
+.label {
+	-fx-color: #FFFFFF;
 }
 
 .text-field {
-	-fx-border-color: #000000;
+	-fx-background-color: #000000;
+	-fx-border-color: #FFFFFF;
+	-fx-border-radius: 5px;
+	-fx-text-fill: #FFFFFF;
 }
 
 .text-area {
-	-fx-border-color: #000000;
+    -fx-text-fill: #ffffff;
+    -fx-border-color: #FFFFFF;
 	-fx-border-radius: 5px;
+}
+
+.text-area .content{
+	-fx-background-color: #000000;
+	-fx-text-fill: #00ff00;
+	-fx-highlight-text-fill: #000000;
 }

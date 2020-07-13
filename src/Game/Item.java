@@ -1,11 +1,6 @@
 package Game;
 
 public class Item {
-	
-	/*
-	 * TODO: Be ready for this to be overhauled to allowed items to be used and have specific functions.
-	 * 			May result in needing to abstract this stuff out but this system works so far
-	 */
 
 	private String name;
 	private int heal;
@@ -28,6 +23,12 @@ public class Item {
 		setDefaults(id);
 	}
 	
+	/*
+	 * Adding new items:
+	 * 	a hashmap of items is compiled upon launch and is referenced whenever an item is in the inventory or picked up.
+	 * 	- to add an item add "else if (id == n){}" and give it some properties
+	 * 	- then in Inventory.java, update readItems() to match the largest id number
+	 */
 	public void setDefaults(int id) {
 		if (id == 1) {
 			this.name = "Apple";
@@ -102,7 +103,7 @@ public class Item {
 	}
 	
 	public String getName() {
-		return name;
+		return this.name;
 	}
 
 	public void setName(String name) {
@@ -110,7 +111,7 @@ public class Item {
 	}
 
 	public int getHeal() {
-		return heal;
+		return this.heal;
 	}
 
 	public void setHeal(int heal) {
@@ -118,7 +119,7 @@ public class Item {
 	}
 
 	public int getDamage() {
-		return damage;
+		return this.damage;
 	}
 
 	public void setDamage(int damage) {
@@ -134,7 +135,7 @@ public class Item {
 	}
 
 	public int getStack() {
-		return stack;
+		return this.stack;
 	}
 
 	public void setStack(int stack) {
@@ -142,7 +143,7 @@ public class Item {
 	}
 	
 	public int getMaxStack() {
-		return maxStack;
+		return this.maxStack;
 	}
 
 	public void setMaxStack(int maxStack) {
